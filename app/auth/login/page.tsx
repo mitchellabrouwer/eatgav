@@ -89,7 +89,7 @@ function Login() {
             </div>
             <button
               type="submit"
-              className={`mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 ${
+              className={`mt-4 bg-red-500 flex w-full justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 ${
                 isSubmitting ? "opacity-75" : ""
               }`}
               disabled={isSubmitting}
