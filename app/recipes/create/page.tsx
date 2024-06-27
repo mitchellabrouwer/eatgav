@@ -14,7 +14,7 @@ const CreateRecipe: React.FC = () => {
   const [ingredientInput, setIngredientInput] = useState("");
   const [stepInput, setStepInput] = useState("");
   const [editIngredientIndex, setEditIngredientIndex] = useState<number | null>(
-    null
+    null,
   );
   const [editStepIndex, setEditStepIndex] = useState<number | null>(null);
   const [editIngredientInput, setEditIngredientInput] = useState("");
@@ -122,7 +122,7 @@ const CreateRecipe: React.FC = () => {
   return (
     <ProtectedRoute>
       <div className="max-w-md mx-auto p-4 text-white">
-        <h1 className="text-2xl font-bold mb-4">Create Recipe</h1>
+        <h1 className="text-2xl font-sans font-bold mb-4">Create Recipe</h1>
         {error && (
           <div className="bg-red-100 text-red-700 p-2 mb-4">{error}</div>
         )}
