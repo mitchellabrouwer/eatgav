@@ -10,7 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { createClient } from "../../utils/supabase/client";
+import { createClientInBrowser } from "../../utils/supabase/client";
 
 // import { Database } from "../../../lib/types/database.types";
 
@@ -22,12 +22,14 @@ interface AuthContextType {
 }
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [userSession, setUserSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // const supabase = createClientComponentClient<Database>();
-  const supabase = createClient();
+  const supabase = createClientInBrowser();
   const router = useRouter();
 
   useEffect(() => {

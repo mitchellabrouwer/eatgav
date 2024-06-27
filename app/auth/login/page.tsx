@@ -4,7 +4,7 @@ import { FormEvent, useRef, useState } from "react";
 import { MdEmail, MdOutlineLink } from "react-icons/md";
 // import { Database } from "../../../lib/types/database.types";
 import { LuPartyPopper } from "react-icons/lu";
-import { createClient } from "../../utils/supabase/client";
+import { createClientInBrowser } from "../../utils/supabase/client";
 import { PublicRoute } from "../shared/PublicRoute";
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const emailInputRef = useRef<HTMLInputElement>(null);
   // const supabase = createClient<Database>();
-  const supabase = createClient();
+  const supabase = createClientInBrowser();
 
   const signInWithEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
