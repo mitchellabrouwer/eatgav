@@ -32,6 +32,7 @@ export default function Navbar() {
         </Link>
         <div>
           <div>
+            {/* TODO: gets stuck loading on initial load */}
             {userSession ? (
               <UserDropdown userSession={userSession} handleSignOut={signOut} />
             ) : (
