@@ -1,10 +1,17 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
+import Select, { MultiValue } from "react-select";
 import { useAuth } from "../../auth/shared/AuthContext";
 import { ProtectedRoute } from "../../auth/shared/ProtectedRoute";
 import EditableList from "../../components/ui/EditableList";
 import { createClientInBrowser } from "../../utils/supabase/client";
+import {
+  costOptions,
+  difficultyOptions,
+  occasionOptions,
+  timeOptions,
+} from "../categories";
 
 const CreateRecipe: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -19,6 +26,20 @@ const CreateRecipe: React.FC = () => {
   const [editStepIndex, setEditStepIndex] = useState<number | null>(null);
   const [editIngredientInput, setEditIngredientInput] = useState("");
   const [editStepInput, setEditStepInput] = useState("");
+  const [occasion, setOccasion] = useState<
+    MultiValue<{ value: string; label: string }>
+  >([]);
+  const [cost, setCost] = useState<{ value: string; label: string } | null>(
+    costOptions[2],
+  ); // Default to "ok"
+  const [difficulty, setDifficulty] = useState<{
+    value: number;
+    label: string;
+  } | null>(difficultyOptions[2]); // Default to "Moderate"
+  const [time, setTime] = useState<{ value: number; label: string } | null>(
+    null,
+  );
+  const [notes, setNotes] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -34,6 +55,16 @@ const CreateRecipe: React.FC = () => {
       return;
     }
 
+    if (
+      title.trim() === "" ||
+      description.trim() === "" ||
+      !time ||
+      occasion.length === 0
+    ) {
+      setError("All fields are required");
+      return;
+    }
+
     const { data, error } = await supabase.from("recipes").insert([
       {
         user_id: userSession.user.id,
@@ -41,6 +72,11 @@ const CreateRecipe: React.FC = () => {
         description,
         ingredients: JSON.stringify(ingredients),
         steps: JSON.stringify(steps),
+        occasion: JSON.stringify(occasion.map((oc) => oc.value)),
+        cost: cost?.value,
+        difficulty: difficulty?.value,
+        time: time?.value,
+        notes,
       },
     ]);
 
@@ -54,6 +90,11 @@ const CreateRecipe: React.FC = () => {
       setSteps([]);
       setIngredientInput("");
       setStepInput("");
+      setOccasion([]);
+      setCost(costOptions[2]);
+      setDifficulty(difficultyOptions[2]);
+      setTime(null);
+      setNotes("");
     }
   };
 
@@ -147,6 +188,70 @@ const CreateRecipe: React.FC = () => {
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
               required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Occasion</label>
+            <Select
+              isMulti
+              value={occasion}
+              onChange={(selectedOptions) =>
+                setOccasion(
+                  selectedOptions as MultiValue<{
+                    value: string;
+                    label: string;
+                  }>,
+                )
+              }
+              options={occasionOptions}
+              className="text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Cost</label>
+            <Select
+              value={cost}
+              onChange={(selectedOption) =>
+                setCost(
+                  selectedOption as { value: string; label: string } | null,
+                )
+              }
+              options={costOptions}
+              className="text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Difficulty</label>
+            <Select
+              value={difficulty}
+              onChange={(selectedOption) =>
+                setDifficulty(
+                  selectedOption as { value: number; label: string } | null,
+                )
+              }
+              options={difficultyOptions}
+              className="text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Time (in minutes)</label>
+            <Select
+              value={time}
+              onChange={(selectedOption) =>
+                setTime(
+                  selectedOption as { value: number; label: string } | null,
+                )
+              }
+              options={timeOptions}
+              className="text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-300">Notes</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
             />
           </div>
           <div className="mb-4">
